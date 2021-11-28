@@ -2,31 +2,49 @@
 #' 创建百度可信存证会话管理器
 #'
 #' @param py_venv py_venv地址
+#' @param package 增加把的应用
 #'
 #' @return 返回值
 #' @import reticulate
+#' @import rJava
 #' @export
 #'
 #' @examples
 #' xp_session()
-xp_session <- function(py_venv ="/opt/my_env" ) {
+xp_session <- function(py_venv ="/opt/my_env",package='rJava') {
+  if(package == 'rJava'){
+    library(rJava)
+    .jinit()        # JVM start
+    .jclassPath()   # get default class path
+    jarpath_xuper = system.file('java','saas-java-linux-core.jar',package = "xupeR")
+    .jaddClassPath(jarpath_xuper)
+    jarpath_saas = system.file('java','rds-invcer.jar',package = "xupeR")
+    .jaddClassPath(jarpath_saas)
+    .jclassPath()   # get class path with added path
+    xuper = .jnew("com.baidu.xchain.saas.SaasJavaManager")
+    saas = .jnew("rds.InvCer")
+    libPath =  system.file('java','libSaasJavaSDK.so',package = "xupeR");
+    saas$setLibPath(libPath);
+  }else{
+    #使用jpype作为过渡
+    reticulate::use_virtualenv(py_venv, required = TRUE)
+    jpype = import('jpype')
+    os = import('os')
+    jvmPath = jpype$getDefaultJVMPath()
+    system.file('java','rds-invcer.jar',package = "xupeR")
 
-  reticulate::use_virtualenv(py_venv, required = TRUE)
-  jpype = import('jpype')
-  os = import('os')
-  jvmPath = jpype$getDefaultJVMPath()
-  system.file('java','rds-invcer.jar',package = "xupeR")
+    jarpath_xuper = system.file('java','saas-java-linux-core.jar',package = "xupeR")
+    jarpath_saas = system.file('java','rds-invcer.jar',package = "xupeR")
+    jpype_status = jpype$isJVMStarted()
+    if(!jpype_status){
+      jpype$startJVM(jvmPath,"-ea", classpath=list(jarpath_xuper,jarpath_saas))
+    }
+    xuper = jpype$JClass("com.baidu.xchain.saas.SaasJavaManager")
+    saas = jpype$JClass("rds.InvCer")
 
-  jarpath_xuper = system.file('java','saas-java-linux-core.jar',package = "xupeR")
-  jarpath_saas = system.file('java','rds-invcer.jar',package = "xupeR")
-  jpype_status = jpype$isJVMStarted()
-  if(!jpype_status){
-    jpype$startJVM(jvmPath,"-ea", classpath=list(jarpath_xuper,jarpath_saas))
   }
-  xuper = jpype$JClass("com.baidu.xchain.saas.SaasJavaManager")
-  saas = jpype$JClass("rds.InvCer")
-  libPath =  system.file('java','libSaasJavaSDK.so',package = "xupeR");
-  saas$setLibPath(libPath);
+
+
   return(saas)
 }
 #检查private.key目录是否存在-----
@@ -52,7 +70,12 @@ xp_checkPrivateKey <- function(session = xp_session(),
   #格式化文本
   json_isExist = rjson::fromJSON(txt_isExist)
   #获取结果
-  res =  json_isExist$data
+  info =  json_isExist$code
+  if(info == 0){
+    res =TRUE
+  }else{
+    res = FALSE
+  }
   return(res)
 
 

@@ -4,10 +4,12 @@
 \alias{xp_session}
 \title{创建百度可信存证会话管理器}
 \usage{
-xp_session(py_venv = "/opt/my_env")
+xp_session(py_venv = "/opt/my_env", package = "rJava")
 }
 \arguments{
 \item{py_venv}{py_venv地址}
+
+\item{package}{增加把的应用}
 }
 \value{
 返回值

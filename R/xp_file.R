@@ -25,7 +25,7 @@ xp_uploadFile <- function(session = xp_session(),
   if(key_status){
     #private key 存在
     if(bal_stauts){
-      crossTransfer = saas$crossTransfer(key_path,
+      crossTransfer = session$crossTransfer(key_path,
                                          password,filePath,fileName,companyPrefix)
       txt_crossTransfer =  as.character(crossTransfer)
       res =  rjson::fromJSON(txt_crossTransfer)
