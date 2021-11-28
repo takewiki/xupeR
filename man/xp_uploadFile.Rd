@@ -7,7 +7,7 @@
 xp_uploadFile(
   session = xp_session(),
   key_path = "data-raw/cfg",
-  password = "396283",
+  password = "123456",
   filePath = "/home/ubuntu/xuper/porsche.jpg",
   fileName = "netStore2.jp",
   companyPrefix = "棱星数据"

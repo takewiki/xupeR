@@ -1,7 +1,7 @@
 Package: xupeR
 Type: Package
 Title: baidu xuper saas sdk in R
-Version: 0.2.0
+Version: 0.3.0
 Author: zhangxin,lishun,hulilei
 Maintainer: <hulilei@takewiki.com.cn>
 Description: baidu only provide the java sdk

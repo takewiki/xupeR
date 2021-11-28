@@ -7,7 +7,7 @@
 xp_QueryFile(
   session = xp_session(),
   key_path = "data-raw/cfg",
-  password = "396283",
+  password = "123456",
   txtId = "5974108e7624f1f8c955ad170eeb84862c6322cb295a6ab354b4f4d6323c135d"
 )
 }

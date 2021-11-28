@@ -7,7 +7,7 @@
 xp_checkBalance(
   session = xp_session(),
   key_path = "data-raw/cfg",
-  password = "396283"
+  password = "123456"
 )
 }
 \arguments{
